@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
-import {Button, Input, Layout, List, message} from 'antd';
+import {Button, InputItem, List, Toast} from 'antd-mobile';
 import {connect} from "react-redux";
-import {addTodo, addTodoAsync, setVisibilityFilter, toggleTodo} from "./actions";
-import {add_count, add_count_async, remove_count, reset_count} from "./actions/addActions";
+import {addTodo, addTodoAsync, setVisibilityFilter, toggleTodo} from "./store/actions/todo";
+import {add_count, add_count_async, remove_count, reset_count} from "./store/actions/couter";
+import axios from 'axios';
 
-const {
-  Footer
-} = Layout;
+const Item = List.Item;
 
 const getVisibleTodos = (todos, filter) => {
   switch (filter) {
@@ -46,11 +45,14 @@ class App extends Component {
     this.state = {
       value: '',
     }
-    console.log(props);
+
+    axios.get('/data').then(res => {
+      console.log('-------', res);
+    }).catch(err => console.log('+++++++++++++', err))
   }
 
-  handleChange = (event) => {
-    this.setState({value: event.target.value})
+  handleChange = (value) => {
+    this.setState({value})
   }
 
   handleClick = (event) => {
@@ -74,7 +76,7 @@ class App extends Component {
         this.setState({value: ''})
       }
     } else {
-      message.info('输入框不能为空')
+      Toast.info('输入框不能为空')
     }
   }
 
@@ -85,33 +87,32 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Input
+        <InputItem
           value={this.state.value}
           onChange={this.handleChange}
           onKeyPress={this.handleEnter}
         />
         <Button onClick={this.handleClick}>提交</Button>
         <Button onClick={this.handleClickAsync}>提交Async</Button>
-        <List
-          bordered
-          dataSource={this.props.todos}
-          renderItem={item => (
-            <List.Item
+        <List>
+          {this.props.todos.map(item => (
+            <Item
               key={item.id}
               style={{textDecoration: item.status ? 'line-through' : 'none'}}
               onClick={() => this.handleItem(item)}
-            >{item.value}</List.Item>
-          )}
-        >
+            >
+              {item.value}
+            </Item>
+          ))}
         </List>
-        <Footer>
+        <div>
           <Button type={this.props.filterType === 'SHOW_ALL' ? 'primary' : 'default'}
                   onClick={() => this.props.setVisibilityFilter('SHOW_ALL')}>全部</Button>
           <Button type={this.props.filterType === 'SHOW_COMPLETED' ? 'primary' : 'default'}
                   onClick={() => this.props.setVisibilityFilter('SHOW_COMPLETED')}>未完成</Button>
           <Button type={this.props.filterType === 'SHOW_ACTIVE' ? 'primary' : 'default'}
                   onClick={() => this.props.setVisibilityFilter('SHOW_ACTIVE')}>已完成</Button>
-        </Footer>
+        </div>
 
         <p>{this.props.counter}</p>
         <Button onClick={this.props.add_count}>+</Button>

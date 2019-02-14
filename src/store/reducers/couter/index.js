@@ -1,6 +1,6 @@
 let count = 10;
 
-export const counter = (state = count, action) => {
+export default (state = count, action) => {
   switch (action.type) {
     case 'ADD_COUNT':
       return state + 1;
