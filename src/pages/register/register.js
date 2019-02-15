@@ -3,8 +3,11 @@
  * */
 import React from "react"
 import {WhiteSpace, List, InputItem, Radio, Button} from "antd-mobile";
+import {connect} from "react-redux";
+import {regisger} from "../../store/user";
 import Logo from "../../component/logo/logo";
 
+@connect(state => state.user, {regisger})
 class Register extends React.Component {
   constructor() {
     super()
@@ -23,7 +26,7 @@ class Register extends React.Component {
   }
 
   handleRegister = () => {
-    console.log(this.state);
+    this.props.regisger(this.state);
   }
 
   render() {

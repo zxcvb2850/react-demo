@@ -4,12 +4,14 @@ import thunk from "redux-thunk"
 import todo from "./reducers/todo/todo";
 import todoFilter from "./reducers/todo/todoFilter";
 import counter from "./reducers/couter/index";
+import {user} from "./user";
 
 const store = createStore(
   combineReducers({
     todo,
     todoFilter,
-    counter
+    counter,
+    user
   }),
   composeWithDevTools(
     applyMiddleware(thunk)
