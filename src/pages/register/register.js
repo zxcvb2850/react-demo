@@ -4,8 +4,10 @@
 import React from "react"
 import {WhiteSpace, List, InputItem, Radio, Button} from "antd-mobile";
 import {connect} from "react-redux";
+import {Redirect} from "react-router-dom";
 import {regisger} from "../../store/user";
 import Logo from "../../component/logo/logo";
+import "./register.less";
 
 @connect(state => state.user, {regisger})
 class Register extends React.Component {
@@ -32,9 +34,10 @@ class Register extends React.Component {
   render() {
     const RadioItem = Radio.RadioItem
     return (
-      <div>
+      <div className='register'>
+        {this.props.redirectTo ? <Redirect to={this.props.redirectTo}/> : null}
         <Logo/>
-        <h2>注册页面</h2>
+        <h2 className={'title'}>注册页面</h2>
         <List>
           <InputItem
             onChange={v => this.handleChange('user', v)}
