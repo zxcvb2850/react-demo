@@ -13,6 +13,13 @@ import {Redirect} from "react-router-dom";
   {login}
 )
 class Login extends React.Component {
+  componentDidMount() {
+    console.log('-------', this.props.user)
+    if (this.props.user) {
+      this.setState({user: this.props.user})
+    }
+  }
+
   constructor() {
     super()
     this.state = {
@@ -43,11 +50,13 @@ class Login extends React.Component {
         <h2>登陆页面</h2>
         <List>
           <InputItem
+            value={this.state.user}
             onChange={v => this.handleChange('user', v)}
           >用户名</InputItem>
           <WhiteSpace/>
           <InputItem
             onChange={v => this.handleChange('pwd', v)}
+            type='password'
           >密码</InputItem>
         </List>
         <WingBlank>

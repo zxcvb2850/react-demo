@@ -1,9 +1,12 @@
 import React from "react";
 import {withRouter} from "react-router-dom";
+import {connect} from "react-redux"
 import {userInfo} from "../../api/user";
 import {showToast} from "../../utils/common";
+import {loadData} from "../../store/user"
 
 @withRouter
+@connect(null, {loadData})
 class AuthRoute extends React.Component {
   async componentDidMount() {
     const publicList = ['/login', '/register']
@@ -15,6 +18,8 @@ class AuthRoute extends React.Component {
     if (result.code !== 0) {
       showToast(result.msg, 'fail');
       this.props.history.push('/login')
+    } else {
+      this.props.loadData(result)
     }
   }
 

@@ -8,6 +8,7 @@ import {getRedirectPath} from "../../utils/utils";
 const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
 const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
 const ERROR_MSG = 'ERROR_MSG'
+const LOGIN_DATA = 'LOGIN_DATA'
 
 const initState = {
   isAuth: false,//是否登录
@@ -21,12 +22,14 @@ const initState = {
 export function user(state = initState, action) {
   switch (action.type) {
     case REGISTER_SUCCESS:
-      return {...state, msg: '', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload}
+      return {...state, msg: '', redirectTo: '/login', isAuth: true, ...action.payload}
     case ERROR_MSG:
       return {...state, isAuth: false, msg: action.msg}
     case LOGIN_SUCCESS:
       console.log(action)
       return {...state, msg: '', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload}
+    case LOGIN_DATA:
+      return {...state, ...action.payload}
     default:
       return {}
   }
@@ -57,8 +60,7 @@ export function login({user, pwd}) {
   return dispatch => {
     axios.post('/users/login', {user, pwd})
       .then(res => {
-        console.log('----', res)
-        if (res.status !== 200 && res.data.code !== 0) {
+        if (res.status !== 200 || res.data.code !== 0) {
           return errorMsg(res.data.msg)
         } else {
           dispatch(loginSuccess(res.data.data, res.data.msg))
@@ -83,7 +85,7 @@ export function regisger({user, pwd, repeatpwd, type}) {
     axios.post('/users/register', {user, pwd, type})
       .then(res => {
         if (res.status === 200 && res.data.code === 0) {
-          dispatch(registerSuccess({user, pwd, type}, res.data.msg))
+          dispatch(registerSuccess({user, type}, res.data.msg))
         } else {
           dispatch(errorMsg(res.data.msg))
         }
@@ -93,4 +95,9 @@ export function regisger({user, pwd, repeatpwd, type}) {
         dispatch(errorMsg('获取失败'))
       })
   }
+}
+
+// 获取用户信息
+export function loadData(userinfo) {
+  return {type: LOGIN_DATA, payload: userinfo}
 }

@@ -6,7 +6,9 @@ import store from "./store"
 import * as serviceWorker from './serviceWorker';
 import Login from "./pages/login/login";
 import Register from "./pages/register/register";
-import AuthRoute from "./component/authroute/authroute";
+import AuthRoute from "./component/authroute/index";
+import BossInfo from "./pages/bossInfo/bossInfo"
+import GeniusInfo from "./pages/geniusInfo/geniusInfo"
 
 ReactDOM.render(
   <Provider store={store}>
@@ -15,6 +17,8 @@ ReactDOM.render(
         <AuthRoute/>
         <Route path="/login" component={Login}/>
         <Route path="/register" component={Register}/>
+        <Route path="/bossinfo" component={BossInfo}/>
+        <Route path="/geniusinfo" component={GeniusInfo}/>
       </div>
     </Router>
   </Provider>
