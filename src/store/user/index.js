@@ -5,8 +5,7 @@ import axios from "axios"
 import {showToast} from "../../utils/common";
 import {getRedirectPath} from "../../utils/utils";
 
-const REGISTER_SUCCESS = 'REGISTER_SUCCESS'
-const LOGIN_SUCCESS = 'LOGIN_SUCCESS'
+const AUTO_SUCCESS = 'AUTO_SUCCESS'
 const ERROR_MSG = 'ERROR_MSG'
 const LOGIN_DATA = 'LOGIN_DATA'
 
@@ -21,13 +20,10 @@ const initState = {
 // reducer
 export function user(state = initState, action) {
   switch (action.type) {
-    case REGISTER_SUCCESS:
-      return {...state, msg: '', redirectTo: '/login', isAuth: true, ...action.payload}
+    case AUTO_SUCCESS:
+      return {...state, msg: '', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload}
     case ERROR_MSG:
       return {...state, isAuth: false, msg: action.msg}
-    case LOGIN_SUCCESS:
-      console.log(action)
-      return {...state, msg: '', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload}
     case LOGIN_DATA:
       return {...state, ...action.payload}
     default:
@@ -35,14 +31,9 @@ export function user(state = initState, action) {
   }
 }
 
-function registerSuccess(data, msg = "获取成功") {
+function autoSuccess(data, msg = "获取成功") {
   showToast(msg, 'success')
-  return {type: REGISTER_SUCCESS, payload: data}
-}
-
-function loginSuccess(data, msg) {
-  showToast(msg, 'success')
-  return {type: LOGIN_SUCCESS, payload: data}
+  return {type: AUTO_SUCCESS, payload: data}
 }
 
 function errorMsg(msg) {
@@ -63,7 +54,7 @@ export function login({user, pwd}) {
         if (res.status !== 200 || res.data.code !== 0) {
           return errorMsg(res.data.msg)
         } else {
-          dispatch(loginSuccess(res.data.data, res.data.msg))
+          dispatch(autoSuccess(res.data.data, res.data.msg))
         }
       })
       .catch(err => {
@@ -85,7 +76,7 @@ export function regisger({user, pwd, repeatpwd, type}) {
     axios.post('/users/register', {user, pwd, type})
       .then(res => {
         if (res.status === 200 && res.data.code === 0) {
-          dispatch(registerSuccess({user, type}, res.data.msg))
+          dispatch(autoSuccess({user, type}, res.data.msg))
         } else {
           dispatch(errorMsg(res.data.msg))
         }
@@ -100,4 +91,24 @@ export function regisger({user, pwd, repeatpwd, type}) {
 // 获取用户信息
 export function loadData(userinfo) {
   return {type: LOGIN_DATA, payload: userinfo}
+}
+
+export function update(data) {
+  if (!data.title && !data.company && !data.money && !data.desc) {
+    return errorMsg('请完整填写信息')
+  }
+  return dispatch => {
+    axios.post('/users/update', data)
+      .then(res => {
+        if (res.status === 200 && res.data.code === 0) {
+          dispatch(autoSuccess(res.data.data, res.data.msg))
+        } else {
+          dispatch(errorMsg(res.data.msg))
+        }
+      })
+      .catch(err => {
+        console.log(err)
+        showToast('提交失败', 'error')
+      })
+  }
 }
