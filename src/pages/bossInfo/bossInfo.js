@@ -6,13 +6,19 @@ import {connect} from "react-redux"
 import {Button, InputItem, NavBar, TextareaItem} from "antd-mobile"
 import AvatarSelect from "../../component/avatarSelect/"
 import {update} from "../../store/user"
+import {Redirect} from "react-router-dom";
 
-@connect(null, {update})
+@connect(state => state.user, {update})
 class BossInfo extends React.Component {
 
   constructor() {
     super()
-    this.state = {}
+    this.state = {
+      title:'',
+      desc:'',
+      company: '',
+      money:'',
+    }
   }
 
   handleChange = (type, val) => {
@@ -25,8 +31,11 @@ class BossInfo extends React.Component {
   }
 
   render() {
+    const path = this.props.location.pathname
+    const redirect = this.props.redirectTo
     return (
       <div>
+        {redirect && redirect !== path ? <Redirect to={this.props.redirectTo}/> : null}
         <NavBar mode="dark">BOSS完善信息页</NavBar>
         <AvatarSelect selectAvatar={this.selectAvatar}/>
         <InputItem onChange={v => this.handleChange('title', v)}>招聘职位</InputItem>
