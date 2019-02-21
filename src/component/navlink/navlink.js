@@ -1,8 +1,10 @@
 /* tabbar */
 import React from "react"
 import PropTyeps from "prop-types"
+import {withRouter} from "react-router-dom"
 import {TabBar} from "antd-mobile"
 
+@withRouter
 class NavLink extends React.Component{
 	static proptyeps={
 		data: PropTyeps.array.isRequired
@@ -10,6 +12,7 @@ class NavLink extends React.Component{
 
 	render(){
 		const navList = this.props.data.filter(v=>!v.hide)
+		const {pathname} = this.props.location
 
 		return (
 			<TabBar>
@@ -17,6 +20,12 @@ class NavLink extends React.Component{
 					<TabBar.Item
 						key={v.path}
 						title={v.text}
+						icon={{uri: require(`./img/${v.icon}.png`)}}
+						selectedIcon={{uri: require(`./img/${v.icon}-active.png`)}}
+						selected={pathname === v.path}
+						onPress={()=>{
+							this.props.history.push(v.path)
+						}}
 					></TabBar.Item>
 					))}
 			</TabBar>
