@@ -2,32 +2,37 @@
  * boss列表页面
  * */
 import React from "react"
-import {connect} from "react-redux"
-import {Button, InputItem, NavBar, TextareaItem} from "antd-mobile"
+import { connect } from "react-redux"
+import { Button, InputItem, NavBar, TextareaItem } from "antd-mobile"
 import AvatarSelect from "../../component/avatarSelect/"
-import {update} from "../../store/user"
-import {Redirect} from "react-router-dom";
+import { update } from "../../store/user"
+import { Redirect } from "react-router-dom";
 
-@connect(state => state.user, {update})
+@connect(state => state.user, { update })
 class BossInfo extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.time !== nextState.time) {
+      return true
+    }
+    return false
+  }
 
   constructor() {
     super()
     this.state = {
-      title:'',
-      desc:'',
+      title: '',
+      desc: '',
       company: '',
-      money:'',
+      money: '',
     }
   }
 
   handleChange = (type, val) => {
-    this.setState({[type]: val})
+    this.setState({ [type]: val })
   }
 
   selectAvatar = (val) => {
-    console.log(val)
-    this.setState({icon: val})
+    this.setState({ icon: val })
   }
 
   render() {
@@ -35,9 +40,9 @@ class BossInfo extends React.Component {
     const redirect = this.props.redirectTo
     return (
       <div>
-        {redirect && redirect !== path ? <Redirect to={this.props.redirectTo}/> : null}
+        {redirect && redirect !== path ? <Redirect to={this.props.redirectTo} /> : null}
         <NavBar mode="dark">BOSS完善信息页</NavBar>
-        <AvatarSelect selectAvatar={this.selectAvatar}/>
+        <AvatarSelect selectAvatar={this.selectAvatar} />
         <InputItem onChange={v => this.handleChange('title', v)}>招聘职位</InputItem>
         <InputItem onChange={v => this.handleChange('company', v)}>公司名称</InputItem>
         <InputItem onChange={v => this.handleChange('money', v)}>职位薪资</InputItem>

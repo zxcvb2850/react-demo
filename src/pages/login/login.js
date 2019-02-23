@@ -14,7 +14,6 @@ import {Redirect} from "react-router-dom";
 )
 class Login extends React.Component {
   componentDidMount() {
-    console.log('-------', this.props.user)
     if (this.props.user) {
       this.setState({user: this.props.user})
     }

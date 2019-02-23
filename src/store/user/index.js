@@ -2,8 +2,8 @@
  * 用户登录相关的redux
  * */
 import axios from "axios"
-import {showToast} from "../../utils/common";
-import {getRedirectPath} from "../../utils/utils";
+import { showToast } from "../../utils/common";
+import { getRedirectPath } from "../../utils/utils";
 
 const AUTO_SUCCESS = 'AUTO_SUCCESS'
 const ERROR_MSG = 'ERROR_MSG'
@@ -21,11 +21,11 @@ const initState = {
 export function user(state = initState, action) {
   switch (action.type) {
     case AUTO_SUCCESS:
-      return {...state, msg: '', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload}
+      return { ...state, msg: '获取成功', redirectTo: getRedirectPath(action.payload), isAuth: true, ...action.payload }
     case ERROR_MSG:
-      return {...state, isAuth: false, msg: action.msg}
+      return { ...state, isAuth: false, msg: action.msg }
     case LOGIN_DATA:
-      return {...state, ...action.payload}
+      return { ...state, ...action.payload }
     default:
       return {}
   }
@@ -33,23 +33,23 @@ export function user(state = initState, action) {
 
 function autoSuccess(data, msg = "获取成功") {
   showToast(msg, 'success')
-  return {type: AUTO_SUCCESS, payload: data}
+  return { type: AUTO_SUCCESS, payload: {...data, time: Date.now()} }
 }
 
 function errorMsg(msg) {
   showToast(msg, 'info')
-  return {msg, type: ERROR_MSG}
+  return { msg, type: ERROR_MSG }
 }
 
 /* actions */
 
 //登录
-export function login({user, pwd}) {
+export function login({ user, pwd }) {
   if (!user || !pwd) {
     return errorMsg('请输入用户名密码')
   }
   return dispatch => {
-    axios.post('/users/login', {user, pwd})
+    axios.post('/users/login', { user, pwd })
       .then(res => {
         if (res.status !== 200 || res.data.code !== 0) {
           return errorMsg(res.data.msg)
@@ -65,7 +65,7 @@ export function login({user, pwd}) {
 }
 
 //注册
-export function regisger({user, pwd, repeatpwd, type}) {
+export function regisger({ user, pwd, repeatpwd, type }) {
   if (!user || !pwd || !type) {
     return errorMsg('用户名密码必填')
   }
@@ -73,10 +73,10 @@ export function regisger({user, pwd, repeatpwd, type}) {
     return errorMsg('两次密码不一致')
   }
   return dispatch => {
-    axios.post('/users/register', {user, pwd, type})
+    axios.post('/users/register', { user, pwd, type })
       .then(res => {
         if (res.status === 200 && res.data.code === 0) {
-          dispatch(autoSuccess({user, type}, res.data.msg))
+          dispatch(autoSuccess({ user, type }, res.data.msg))
         } else {
           dispatch(errorMsg(res.data.msg))
         }
@@ -90,7 +90,7 @@ export function regisger({user, pwd, repeatpwd, type}) {
 
 // 获取用户信息
 export function loadData(userinfo) {
-  return {type: LOGIN_DATA, payload: userinfo}
+  return { type: LOGIN_DATA, payload: userinfo }
 }
 
 export function update(data) {

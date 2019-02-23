@@ -11,7 +11,6 @@ export default class NameForm extends Component {
   }
 
   handleSubmit(event) {
-    console.log(event, this.input.value);
     event.preventDefault();
   }
 

@@ -47,7 +47,6 @@ class App extends Component {
     }
 
     axios.get('/data').then(res => {
-      console.log('-------', res);
     }).catch(err => console.log('+++++++++++++', err))
   }
 

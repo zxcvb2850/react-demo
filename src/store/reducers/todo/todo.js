@@ -7,7 +7,6 @@ const todos = (state = [], action) => {
         status: false,
       }]
     case 'ADD_TODO_ASYNC':
-      console.log('---------', state, action)
       return setTimeout(() => ([...state, {
         id: action.id,
         value: action.value,

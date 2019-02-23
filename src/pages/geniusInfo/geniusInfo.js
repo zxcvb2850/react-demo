@@ -10,6 +10,12 @@ import {Redirect} from "react-router-dom";
 
 @connect(state => state.user, {update})
 class GeniusInfo extends React.Component {
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.time !== nextState.time) {
+      return true
+    }
+    return false
+  }
 
   constructor() {
     super()
@@ -24,7 +30,6 @@ class GeniusInfo extends React.Component {
   }
 
   selectAvatar = (val) => {
-    console.log(val)
     this.setState({icon: val})
   }
 
