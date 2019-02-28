@@ -14,7 +14,7 @@ import Dashoard from "./pages/dashoard/dashoard"
 ReactDOM.render(
   <Provider store={store}>
     <Router>
-      <div>
+      <>
         <AuthRoute/>
         <Switch>
           <Route path="/login" component={Login}/>
@@ -23,7 +23,7 @@ ReactDOM.render(
           <Route path="/geniusinfo" component={GeniusInfo}/>
           <Route component={Dashoard}/>
         </Switch>
-      </div>
+      </>
     </Router>
   </Provider>
   , document.getElementById('root'));

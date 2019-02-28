@@ -1,9 +1,11 @@
 import React from "react"
 import { connect } from "react-redux"
 import { NavBar } from "antd-mobile"
+import { Switch, Route } from "react-router-dom"
 import BossIndex from "../boss/index"
 import GeniusIndex from "../genius/index"
 import NavLinkBar from "../../component/navlink/navlink"
+import "./dashoard.less"
 
 const Msg = () => (<h2>MsgIndex</h2>)
 const User = () => (<h2>UserIndex</h2>)
@@ -42,10 +44,15 @@ class Dashoard extends React.Component {
 			component: User
 		}]
 		return (
-			<div>
-				<NavBar mode='dard'>{navList.find(v => v.path === pathname).title}</NavBar>
+			<>
+				<NavBar mode='dard' className={"fixd-header"}>{navList.find(v => v.path === pathname).title}</NavBar>
+				<div style={{ marginTop: 45 }}>
+					<Switch>
+						{navList.map(v => (<Route key={v.path} path={v.path} component={v.component} />))}
+					</Switch>
+				</div>
 				<NavLinkBar data={navList}></NavLinkBar>
-			</div>
+			</>
 		)
 	}
 }
