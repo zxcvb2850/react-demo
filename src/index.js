@@ -1,15 +1,17 @@
-import "@babel/polyfill"
+// import '@babel/polyfill';
+// import 'core-js/stable';
+// import 'regenerator-runtime/runtime';
+import React from 'react';
+import ReactDom from 'react-dom';
 
-import "core-js/stable"
-import "regenerator-runtime/runtime"
+import App from './App';
 
-import React from "react"
-import ReactDom from "react-dom"
+ReactDom.render(
+  <div>
+    <App />
+    222
+  </div>,
+  document.querySelector('#app'),
+);
 
-import App from "./App"
-
-const title = "this is react"
-
-ReactDom.render(<div><App /> {title}</div>, document.querySelector("#app"))
-
-module.hot.accept()
+module.hot.accept();
